@@ -8,7 +8,9 @@ void main() {
 }
 
 final myAppStateProvider = ChangeNotifierProvider((ref) => MyAppState());
-final calloutStateProvider = StateNotifierProvider((ref) => CalloutList());
+final calloutStateProvider = NotifierProvider<CalloutList, List>(() {
+  return CalloutList();
+});
 
 class MyApp extends StatelessWidget {
   @override
@@ -55,7 +57,7 @@ class MyHomePage extends ConsumerWidget {
         page = GeneratorPage();
         break;
       case 1:
-        page = FavoritesPage();
+        page = ListsPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -134,7 +136,7 @@ class GeneratorPage extends ConsumerWidget {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  ref.read(myAppStateProvider.notifier).toggleFavorite();
+                  ref.read(calloutStateProvider.notifier).add('banana');
                 },
                 icon: Icon(icon),
                 label: Text('Like'),
@@ -187,9 +189,9 @@ class ListsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var calloutState = ref.watch(calloutStateProvider);
 
-    if (calloutState.length() < 4) {
+    if (calloutState.length == 0) {
       return Center(
-        child: Text('No favorites yet.'),
+        child: Text('No favorites yet. ${calloutState.length}'),
       );
     }
 
@@ -198,12 +200,12 @@ class ListsPage extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text('You have '
-              '${calloutState.length()} favorites:'),
+              '${calloutState.length} favorites:'),
         ),
         for (var pair in calloutState)
           ListTile(
             leading: Icon(Icons.favorite),
-            title: Text(pair.asLowerCase),
+            title: Text(pair.description),
           ),
       ],
     );

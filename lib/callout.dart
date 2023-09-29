@@ -26,8 +26,13 @@ class Callout {
 }
 
 /// An object that controls a list of [Callout].
-class CalloutList extends StateNotifier<List<Callout>> {
-  CalloutList([List<Callout>? initialCallouts]) : super(initialCallouts ?? []);
+class CalloutList extends Notifier<List> {
+  @override
+  List build() {
+    return [];
+  }
+
+  // CalloutList([List<Callout>? initialCallouts]) : super(initialCallouts ?? []);
 
   int length() {
     return state.length;
