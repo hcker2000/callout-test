@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:english_words/english_words.dart';
 import 'callout.dart';
+import 'calloutFormWidget.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -184,16 +187,23 @@ class FavoritesPage extends ConsumerWidget {
   }
 }
 
+// void _handleSendButtonPressed(ref) {
+//   // Handle the button press here
+//   ref.read(calloutStateProvider.notifier).add(_textEditingController.text);
+// }
+
+// TextEditingController _textEditingController = TextEditingController();
+
 class ListsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var calloutState = ref.watch(calloutStateProvider);
 
-    if (calloutState.length == 0) {
-      return Center(
-        child: Text('No favorites yet. ${calloutState.length}'),
-      );
-    }
+    // if (calloutState.length == 0) {
+    //   return Center(
+    //     child: Text('No favorites yet. ${calloutState.length}'),
+    //   );
+    // }
 
     return ListView(
       children: [
@@ -202,6 +212,9 @@ class ListsPage extends ConsumerWidget {
           child: Text('You have '
               '${calloutState.length} favorites:'),
         ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: CalloutFormWidget()),
         for (var pair in calloutState)
           ListTile(
             leading: Icon(Icons.favorite),
