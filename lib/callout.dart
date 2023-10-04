@@ -12,11 +12,13 @@ class Callout {
   const Callout({
     required this.description,
     required this.id,
+    required this.enabled,
     this.completed = false,
   });
 
   final String id;
   final String description;
+  final bool enabled;
   final bool completed;
 
   @override
@@ -44,21 +46,22 @@ class CalloutList extends Notifier<List> {
       Callout(
         id: _uuid.v4(),
         description: description,
+        enabled: true,
       ),
     ];
   }
 
   void toggle(String id) {
     state = [
-      for (final Callout in state)
-        if (Callout.id == id)
+      for (final CalloutFromState in state)
+        if (CalloutFromState.id == id)
           Callout(
-            id: Callout.id,
-            completed: !Callout.completed,
-            description: Callout.description,
+            id: CalloutFromState.id,
+            enabled: !CalloutFromState.enabled,
+            description: CalloutFromState.description,
           )
         else
-          Callout,
+          CalloutFromState,
     ];
   }
 
@@ -66,11 +69,7 @@ class CalloutList extends Notifier<List> {
     state = [
       for (final Callout in state)
         if (Callout.id == id)
-          Callout(
-            id: Callout.id,
-            completed: Callout.completed,
-            description: description,
-          )
+          Callout(id: Callout.id, description: description, enabled: false)
         else
           Callout,
     ];

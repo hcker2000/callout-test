@@ -216,10 +216,13 @@ class ListsPage extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: CalloutFormWidget()),
         for (var pair in calloutState)
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(pair.description),
-          ),
+          CheckboxListTile(
+              title: Text(pair.description),
+              value: pair.enabled,
+              onChanged: (value) {
+                ref.read(calloutStateProvider.notifier).toggle(pair.id);
+                return;
+              })
       ],
     );
   }
