@@ -36,7 +36,7 @@ class CalloutFormWidget extends ConsumerWidget {
               icon: Icon(Icons.add),
               onPressed: () {
                 final inputValue = ref.read(calloutFormProvider.notifier).state;
-                ref.read(calloutStateProvider.notifier).add(inputValue);
+                // ref.read(calloutStateProvider.notifier).add(inputValue);
                 inputController.clear();
                 ref.read(calloutFormProvider.notifier).set('');
               },

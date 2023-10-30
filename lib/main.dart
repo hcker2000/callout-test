@@ -1,19 +1,16 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:english_words/english_words.dart';
-import 'callout.dart';
-import 'calloutFormWidget.dart';
+import 'pages/splash_page.dart';
+import 'pages/one_step_page.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
 }
 
 final myAppStateProvider = ChangeNotifierProvider((ref) => MyAppState());
-final calloutStateProvider = NotifierProvider<CalloutList, List>(() {
-  return CalloutList();
-});
 
 class MyApp extends StatelessWidget {
   @override
@@ -60,12 +57,13 @@ class MyHomePage extends ConsumerWidget {
         page = GeneratorPage();
         break;
       case 1:
-        page = ListsPage();
+        page = OneStepPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
 
+    // WORKING
     return Scaffold(
       body: Row(
         children: [
@@ -78,8 +76,8 @@ class MyHomePage extends ConsumerWidget {
                   label: Text('Home'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.favorite),
-                  label: Text('Favorites'),
+                  icon: Icon(Icons.sports_martial_arts),
+                  label: Text('One Steps'),
                 ),
               ],
               selectedIndex: selectedIndex,
@@ -93,9 +91,14 @@ class MyHomePage extends ConsumerWidget {
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,
+              child: DecoratedBox(
+                  child: page,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          left:
+                              BorderSide(color: Color(0xFF00305c), width: 2)))),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -139,7 +142,7 @@ class GeneratorPage extends ConsumerWidget {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  ref.read(calloutStateProvider.notifier).add('banana');
+                  // ref.read(calloutStateProvider.notifier).add('banana');
                 },
                 icon: Icon(icon),
                 label: Text('Like'),
@@ -159,74 +162,66 @@ class GeneratorPage extends ConsumerWidget {
   }
 }
 
-class FavoritesPage extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var appState = ref.watch(myAppStateProvider);
+// class OneStepPage extends ConsumerWidget {
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     var calloutState = ref.watch(calloutStateProvider);
+//     List<Widget> widgets = [];
+//     List enabled = calloutState.where((callout) => callout.enabled).toList();
 
-    if (appState.favorites.isEmpty) {
-      return Center(
-        child: Text('No favorites yet.'),
-      );
-    }
+//     for (var pair in calloutState) {
+//       widgets.add(CheckboxListTile(
+//           title: Text(pair.title),
+//           value: pair.enabled,
+//           onChanged: (value) {
+//             ref.read(calloutStateProvider.notifier).toggle(pair.id);
+//             return;
+//           }));
+//     }
 
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Text('You have '
-              '${appState.favorites.length} favorites:'),
-        ),
-        for (var pair in appState.favorites)
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(pair.asLowerCase),
-          ),
-      ],
-    );
-  }
-}
-
-// void _handleSendButtonPressed(ref) {
-//   // Handle the button press here
-//   ref.read(calloutStateProvider.notifier).add(_textEditingController.text);
+//     return Column(
+//       children: [
+//         Row(
+//           children: [
+//             Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 Text(
+//                   'One Steps',
+//                   textAlign: TextAlign.center,
+//                   // overflow: TextOverflow.ellipsis,
+//                   style: const TextStyle(
+//                       fontWeight: FontWeight.bold, fontSize: 40),
+//                 ),
+//                 Text(
+//                   'Enabled ${enabled.length}',
+//                   textAlign: TextAlign.center,
+//                   // overflow: TextOverflow.ellipsis,
+//                   style: const TextStyle(fontSize: 14),
+//                 )
+//               ],
+//             )
+//           ],
+//         ),
+//         Expanded(
+//             child: Row(
+//           children: [
+//             Flexible(
+//                 child: Scrollbar(
+//                     thumbVisibility: true,
+//                     controller: _firstController,
+//                     child: ListView.builder(
+//                         controller: _firstController,
+//                         itemCount: widgets.length,
+//                         itemBuilder: (BuildContext context, int index) {
+//                           return widgets[index];
+//                         })))
+//           ],
+//         ))
+//       ],
+//     );
+//   }
 // }
-
-// TextEditingController _textEditingController = TextEditingController();
-
-class ListsPage extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var calloutState = ref.watch(calloutStateProvider);
-
-    // if (calloutState.length == 0) {
-    //   return Center(
-    //     child: Text('No favorites yet. ${calloutState.length}'),
-    //   );
-    // }
-
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Text('You have '
-              '${calloutState.length} favorites:'),
-        ),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: CalloutFormWidget()),
-        for (var pair in calloutState)
-          CheckboxListTile(
-              title: Text(pair.description),
-              value: pair.enabled,
-              onChanged: (value) {
-                ref.read(calloutStateProvider.notifier).toggle(pair.id);
-                return;
-              })
-      ],
-    );
-  }
-}
 
 class BigCard extends StatelessWidget {
   const BigCard({
