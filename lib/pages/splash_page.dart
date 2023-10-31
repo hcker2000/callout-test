@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'one_step_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -18,7 +19,8 @@ class _SplashPageState extends State<SplashPage>
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     Future.delayed(Duration(seconds: 5), () {
-      // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => OneStepPage()));
     });
   }
 

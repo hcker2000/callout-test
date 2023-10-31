@@ -18,10 +18,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Namer App',
       theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromRGBO(0, 255, 42, 1)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Color.fromRGBO(0, 255, 42, 1),
+            brightness: Brightness.dark),
       ),
-      home: MyHomePage(),
+      home: SplashPage(),
     );
   }
 }
