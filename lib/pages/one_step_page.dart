@@ -46,7 +46,8 @@ List<int> convertStringToIntArray(String string) {
 String? validateInputString(String? string) {
   // Check if the string is empty.
   if (string == null || string.isEmpty) {
-    return 'The string must not be empty.';
+    // return 'The string must not be empty.';
+    return null;
   }
 
   // Check if the string contains any invalid characters.
