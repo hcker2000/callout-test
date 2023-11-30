@@ -2,15 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:english_words/english_words.dart';
+// import 'package:english_words/english_words.dart';
 import 'pages/splash_page.dart';
-import 'pages/one_step_page.dart';
+// import 'pages/one_step_page.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
 }
 
-final myAppStateProvider = ChangeNotifierProvider((ref) => MyAppState());
+// final myAppStateProvider = ChangeNotifierProvider((ref) => MyAppState());
 
 class MyApp extends StatelessWidget {
   @override
@@ -27,141 +27,141 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+// class MyAppState extends ChangeNotifier {
+//   var current = WordPair.random();
 
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
-  }
+//   void getNext() {
+//     current = WordPair.random();
+//     notifyListeners();
+//   }
 
-  var favorites = <WordPair>[];
+//   var favorites = <WordPair>[];
 
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
-    notifyListeners();
-  }
-}
+//   void toggleFavorite() {
+//     if (favorites.contains(current)) {
+//       favorites.remove(current);
+//     } else {
+//       favorites.add(current);
+//     }
+//     notifyListeners();
+//   }
+// }
 
-class MyHomePage extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var selectedIndex = ref.watch(selectedIndexProvider);
+// class MyHomePage extends ConsumerWidget {
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     var selectedIndex = ref.watch(selectedIndexProvider);
 
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = GeneratorPage();
-        break;
-      case 1:
-        page = OneStepPage();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
+//     Widget page;
+//     switch (selectedIndex) {
+//       case 0:
+//         page = GeneratorPage();
+//         break;
+//       case 1:
+//         page = OneStepPage();
+//         break;
+//       default:
+//         throw UnimplementedError('no widget for $selectedIndex');
+//     }
 
-    // WORKING
-    return Scaffold(
-      body: Row(
-        children: [
-          SafeArea(
-            child: NavigationRail(
-              extended: false,
-              destinations: [
-                NavigationRailDestination(
-                  icon: Icon(Icons.home),
-                  label: Text('Home'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.sports_martial_arts),
-                  label: Text('One Steps'),
-                ),
-              ],
-              selectedIndex: selectedIndex,
-              onDestinationSelected: (value) {
-                ref
-                    .read(selectedIndexProvider.notifier)
-                    .setSelectedIndex(value);
-              },
-            ),
-          ),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: DecoratedBox(
-                  child: page,
-                  decoration: BoxDecoration(
-                      border: Border(
-                          left:
-                              BorderSide(color: Color(0xFF00305c), width: 2)))),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
+//     // WORKING
+//     return Scaffold(
+//       body: Row(
+//         children: [
+//           SafeArea(
+//             child: NavigationRail(
+//               extended: false,
+//               destinations: [
+//                 NavigationRailDestination(
+//                   icon: Icon(Icons.home),
+//                   label: Text('Home'),
+//                 ),
+//                 NavigationRailDestination(
+//                   icon: Icon(Icons.sports_martial_arts),
+//                   label: Text('One Steps'),
+//                 ),
+//               ],
+//               selectedIndex: selectedIndex,
+//               onDestinationSelected: (value) {
+//                 ref
+//                     .read(selectedIndexProvider.notifier)
+//                     .setSelectedIndex(value);
+//               },
+//             ),
+//           ),
+//           Expanded(
+//             child: Container(
+//               color: Theme.of(context).colorScheme.primaryContainer,
+//               child: DecoratedBox(
+//                   child: page,
+//                   decoration: BoxDecoration(
+//                       border: Border(
+//                           left:
+//                               BorderSide(color: Color(0xFF00305c), width: 2)))),
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-final selectedIndexProvider =
-    StateNotifierProvider<SelectedIndexNotifier, int>((ref) {
-  return SelectedIndexNotifier();
-});
+// final selectedIndexProvider =
+//     StateNotifierProvider<SelectedIndexNotifier, int>((ref) {
+//   return SelectedIndexNotifier();
+// });
 
-class SelectedIndexNotifier extends StateNotifier<int> {
-  SelectedIndexNotifier() : super(0);
+// class SelectedIndexNotifier extends StateNotifier<int> {
+//   SelectedIndexNotifier() : super(0);
 
-  void setSelectedIndex(int index) {
-    state = index;
-  }
-}
+//   void setSelectedIndex(int index) {
+//     state = index;
+//   }
+// }
 
-class GeneratorPage extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var appState = ref.watch(myAppStateProvider);
-    var pair = appState.current;
+// class GeneratorPage extends ConsumerWidget {
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     var appState = ref.watch(myAppStateProvider);
+//     var pair = appState.current;
 
-    IconData icon;
-    if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
-    }
+//     IconData icon;
+//     if (appState.favorites.contains(pair)) {
+//       icon = Icons.favorite;
+//     } else {
+//       icon = Icons.favorite_border;
+//     }
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BigCard(pair: pair),
-          SizedBox(height: 10),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  // ref.read(calloutStateProvider.notifier).add('banana');
-                },
-                icon: Icon(icon),
-                label: Text('Like'),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(myAppStateProvider.notifier).getNext();
-                },
-                child: Text('Next'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+//     return Center(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           BigCard(pair: pair),
+//           SizedBox(height: 10),
+//           Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               ElevatedButton.icon(
+//                 onPressed: () {
+//                   // ref.read(calloutStateProvider.notifier).add('banana');
+//                 },
+//                 icon: Icon(icon),
+//                 label: Text('Like'),
+//               ),
+//               SizedBox(width: 10),
+//               ElevatedButton(
+//                 onPressed: () {
+//                   ref.read(myAppStateProvider.notifier).getNext();
+//                 },
+//                 child: Text('Next'),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 // class OneStepPage extends ConsumerWidget {
 //   @override
@@ -224,27 +224,27 @@ class GeneratorPage extends ConsumerWidget {
 //   }
 // }
 
-class BigCard extends StatelessWidget {
-  const BigCard({
-    Key? key,
-    required this.pair,
-  }) : super(key: key);
+// class BigCard extends StatelessWidget {
+//   const BigCard({
+//     Key? key,
+//     required this.pair,
+//   }) : super(key: key);
 
-  final WordPair pair;
+//   final WordPair pair;
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.headline6!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
+//   @override
+//   Widget build(BuildContext context) {
+//     final theme = Theme.of(context);
+//     final style = theme.textTheme.headline6!.copyWith(
+//       color: theme.colorScheme.onPrimary,
+//     );
 
-    return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Text(pair.asLowerCase, style: style),
-      ),
-    );
-  }
-}
+//     return Card(
+//       color: theme.colorScheme.primary,
+//       child: Padding(
+//         padding: const EdgeInsets.all(20.0),
+//         child: Text(pair.asLowerCase, style: style),
+//       ),
+//     );
+//   }
+// }
