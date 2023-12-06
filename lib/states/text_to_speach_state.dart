@@ -1,15 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:async';
-import "dart:math";
 import 'one_steps_state.dart';
 
 enum TextToSpeechStateEnum { running, stopped }
 
-void _runTimerLogic(TextToSpeechState state, TextToSpeechNotifier notifier) {
+void _runTimerLogic(
+    TextToSpeechState state, TextToSpeechNotifier notifier, ref) {
   if (state.timerState == TextToSpeechStateEnum.stopped) {
     return;
   }
+
+  if (state.counter <= 0) {
+    final randomValueString =
+        ref.read(oneStepsProvider.notifier).getRandomValueString();
+    print(randomValueString);
+    notifier.flutterTts.speak(randomValueString);
+  }
+
   notifier.decrementCounter();
 }
 
@@ -31,7 +39,7 @@ class TextToSpeechState {
 }
 
 class TextToSpeechNotifier extends Notifier<TextToSpeechState> {
-  late FlutterTts flutterTts;
+  late final FlutterTts flutterTts;
   String? language;
   String? engine;
   double volume = 1;
@@ -41,11 +49,14 @@ class TextToSpeechNotifier extends Notifier<TextToSpeechState> {
   @override
   TextToSpeechState build() {
     ref.onDispose(() => print('TextToSpeechState.onDispose'));
+
+    flutterTts = FlutterTts();
+
     return TextToSpeechState(
         timerState: TextToSpeechStateEnum.stopped,
         counter: 0,
         timer: Timer.periodic(
-            Duration(seconds: 1), (timer) => _runTimerLogic(state, this)));
+            Duration(seconds: 1), (timer) => _runTimerLogic(state, this, ref)));
   }
 
   void setCounter(num value) {
@@ -55,8 +66,8 @@ class TextToSpeechNotifier extends Notifier<TextToSpeechState> {
   void decrementCounter() {
     var newValue = state.counter - 1;
     print('dec');
-    if (newValue <= 0) {
-      newValue = 30; // TODO: get from the state
+    if (newValue < 0) {
+      newValue = 5; // TODO: get from the state
     }
 
     state = state.copyWith(counter: newValue);
@@ -73,7 +84,7 @@ class TextToSpeechNotifier extends Notifier<TextToSpeechState> {
       state = state.copyWith(
         timer: Timer.periodic(
           Duration(seconds: 1),
-          (timer) => _runTimerLogic(state, this),
+          (timer) => _runTimerLogic(state, this, ref),
         ),
       );
     }

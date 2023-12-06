@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "dart:math";
 
 enum MartialArtsMove {
   hand,
@@ -23,6 +24,26 @@ class OneSteps extends Notifier<OneStepsState> {
       state[martialArtsMove]!.clear();
     }
     ref.notifyListeners();
+  }
+
+  String getRandomValueString() {
+    // 1. Filter the map entries.
+    final filteredMap =
+        state.entries.where((entry) => entry.value.isNotEmpty).toList();
+
+    // 2. Check for non-empty entries.
+    if (filteredMap.isEmpty) return "";
+
+    // 3. Get a random entry.
+    final randomEntry = filteredMap[Random().nextInt(filteredMap.length)];
+
+    // 4. Get a random value and convert it to string.
+    final randomValueString = randomEntry
+        .value[Random().nextInt(randomEntry.value.length)]
+        .toString();
+
+    // 5. Combine move and value into a string.
+    return "${randomEntry.key.name} $randomValueString";
   }
 }
 

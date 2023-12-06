@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import '../states/text_to_speach_state.dart';
 
 class OneStepTextToSpeechWidget extends ConsumerWidget {

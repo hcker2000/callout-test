@@ -62,7 +62,9 @@ class OneStepPage extends ConsumerWidget {
                 onPressed: () {
                   if (textToSpeechState.timerState ==
                       TextToSpeechStateEnum.stopped) {
-                    ref.read(textToSpeechProvider.notifier).setCounter(30);
+                    ref
+                        .read(textToSpeechProvider.notifier)
+                        .setCounter(5); // TODO: get from variable
                   } else {
                     ref.read(textToSpeechProvider.notifier).setCounter(0);
                   }
