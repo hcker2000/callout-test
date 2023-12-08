@@ -37,7 +37,10 @@ class _SplashPageState extends State<SplashPage>
       body: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Colors.red, Colors.blue])),
+              gradient: LinearGradient(colors: [
+            Color.fromARGB(255, 237, 26, 59),
+            Color.fromARGB(255, 0, 48, 92)
+          ])),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
