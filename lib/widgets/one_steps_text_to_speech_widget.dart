@@ -9,8 +9,8 @@ class OneStepTextToSpeechWidget extends ConsumerWidget {
 
     return Center(
       child: Text(
-        '${textToSpeechState.timerState.name} ${textToSpeechState.counter}',
-        style: const TextStyle(fontSize: 24),
+        '${textToSpeechState.counter}',
+        style: const TextStyle(fontSize: 100),
       ),
     );
   }

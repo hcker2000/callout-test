@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../states/one_steps_state.dart';
 import '../states/one_steps_form_state.dart';
@@ -7,7 +8,7 @@ List<num> convertStringToIntArray(String? string) {
   // Create an empty list to store the converted integers.
   List<num> intList = [];
 
-  if (string != null) {
+  if (string != null && string != '') {
     // Split the string into a list of strings, using the comma as a delimiter.
     List<String> stringList = string.split(',');
 
@@ -82,80 +83,108 @@ class CalloutFormWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final inputController = TextEditingController();
     final oneStepFormState = ref.watch(oneStepsFormProvider);
+    final oneStepState = ref.watch(oneStepsProvider);
+    final oneStepHandsLength = oneStepState[MartialArtsMove.hand]?.length ?? 0;
+    final oneStepKicksLength = oneStepState[MartialArtsMove.kick]?.length ?? 0;
+    final oneStepGrabsLength = oneStepState[MartialArtsMove.grab]?.length ?? 0;
 
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            initialValue: oneStepFormState[MartialArtsMove.hand] ?? '',
-            validator: validateInputString,
-            onSaved: (String? value) {
-              value ??= '';
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
+              initialValue: oneStepFormState[MartialArtsMove.hand] ?? '',
+              validator: validateInputString, // TODO:
+              onSaved: (String? value) {
+                // TODO:
+                // value ??= '';
 
-              ref.read(oneStepsProvider.notifier).setMove(
-                  MartialArtsMove.hand, convertStringToIntArray(value));
-              ref
-                  .read(oneStepsFormProvider.notifier)
-                  .setMove(MartialArtsMove.hand, value);
-            },
-            decoration: InputDecoration(
-              labelText: 'Hands',
-            ),
-          ),
-          TextFormField(
-            initialValue: oneStepFormState[MartialArtsMove.kick] ?? '',
-            validator: validateInputString,
-            onSaved: (String? value) {
-              value ??= '';
-
-              ref.read(oneStepsProvider.notifier).setMove(
-                  MartialArtsMove.kick, convertStringToIntArray(value));
-              ref
-                  .read(oneStepsFormProvider.notifier)
-                  .setMove(MartialArtsMove.kick, value);
-            },
-            decoration: InputDecoration(
-              labelText: 'Kicks',
-            ),
-          ),
-          TextFormField(
-            initialValue: oneStepFormState[MartialArtsMove.grab] ?? '',
-            validator: validateInputString,
-            onSaved: (String? value) {
-              value ??= '';
-
-              ref.read(oneStepsProvider.notifier).setMove(
-                  MartialArtsMove.grab, convertStringToIntArray(value));
-              ref
-                  .read(oneStepsFormProvider.notifier)
-                  .setMove(MartialArtsMove.grab, value);
-            },
-            decoration: InputDecoration(
-              labelText: 'Grabs',
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-            child: Text(
-                'You can set each field in the following way. For example setting Hands to 1,5,10-12 would result in a call out for Hands 1, Hands 5, Hands 10, Hands 11 and Hands 12. The maximum is 30 and leaving them blank will disable that section of call outs.',
-                style: TextStyle(fontSize: 12)),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  // The form is valid.
-                  _formKey.currentState!.save();
-                } else {
-                  // The form is invalid.
-                }
+                // ref.read(oneStepsProvider.notifier).setMove(
+                //     MartialArtsMove.hand, convertStringToIntArray(value));
+                // ref
+                //     .read(oneStepsFormProvider.notifier)
+                //     .setMove(MartialArtsMove.hand, value);
               },
-              child: Text('Save'),
+              decoration: InputDecoration(
+                labelText: 'Count Down Length',
+              ),
             ),
-          ),
-        ],
+            TextFormField(
+              initialValue: oneStepFormState[MartialArtsMove.hand] ?? '',
+              validator: validateInputString,
+              onSaved: (String? value) {
+                value ??= '';
+
+                ref.read(oneStepsProvider.notifier).setMove(
+                    MartialArtsMove.hand, convertStringToIntArray(value));
+                ref
+                    .read(oneStepsFormProvider.notifier)
+                    .setMove(MartialArtsMove.hand, value);
+              },
+              decoration: InputDecoration(
+                labelText: 'Hands ($oneStepHandsLength)',
+              ),
+            ),
+            TextFormField(
+              initialValue: oneStepFormState[MartialArtsMove.kick] ?? '',
+              validator: validateInputString,
+              onSaved: (String? value) {
+                value ??= '';
+
+                ref.read(oneStepsProvider.notifier).setMove(
+                    MartialArtsMove.kick, convertStringToIntArray(value));
+                ref
+                    .read(oneStepsFormProvider.notifier)
+                    .setMove(MartialArtsMove.kick, value);
+              },
+              decoration: InputDecoration(
+                labelText: 'Kicks ($oneStepKicksLength)',
+              ),
+            ),
+            TextFormField(
+              initialValue: oneStepFormState[MartialArtsMove.grab] ?? '',
+              validator: validateInputString,
+              onSaved: (String? value) {
+                value ??= '';
+
+                ref.read(oneStepsProvider.notifier).setMove(
+                    MartialArtsMove.grab, convertStringToIntArray(value));
+                ref
+                    .read(oneStepsFormProvider.notifier)
+                    .setMove(MartialArtsMove.grab, value);
+              },
+              decoration: InputDecoration(
+                labelText: 'Grabs ($oneStepGrabsLength)',
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+              child: Text(
+                  'You can set each field in the following way. For example setting Hands to 1,5,10-12 would result in a call out for Hands 1, Hands 5, Hands 10, Hands 11 and Hands 12. The maximum is 30 and leaving them blank will disable that section of call outs.',
+                  style: TextStyle(fontSize: 12)),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    // The form is valid.
+                    _formKey.currentState!.save();
+                  } else {
+                    // The form is invalid.
+                  }
+                },
+                child: Text('Save'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
