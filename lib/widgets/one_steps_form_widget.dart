@@ -81,7 +81,6 @@ final _formKey = GlobalKey<FormState>();
 class CalloutFormWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final inputController = TextEditingController();
     final oneStepFormState = ref.watch(oneStepsFormProvider);
     final oneStepState = ref.watch(oneStepsProvider);
     final oneStepHandsLength = oneStepState[MartialArtsMove.hand]?.length ?? 0;
@@ -99,24 +98,18 @@ class CalloutFormWidget extends ConsumerWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
-              initialValue: oneStepFormState[MartialArtsMove.hand] ?? '',
-              validator: validateInputString, // TODO:
+              initialValue: oneStepFormState.delay,
+              validator: validateInputString,
               onSaved: (String? value) {
-                // TODO:
-                // value ??= '';
-
-                // ref.read(oneStepsProvider.notifier).setMove(
-                //     MartialArtsMove.hand, convertStringToIntArray(value));
-                // ref
-                //     .read(oneStepsFormProvider.notifier)
-                //     .setMove(MartialArtsMove.hand, value);
+                value ??= '';
+                ref.read(oneStepsFormProvider.notifier).setDelay(value);
               },
               decoration: InputDecoration(
                 labelText: 'Count Down Length',
               ),
             ),
             TextFormField(
-              initialValue: oneStepFormState[MartialArtsMove.hand] ?? '',
+              initialValue: oneStepFormState.moves[MartialArtsMove.hand] ?? '',
               validator: validateInputString,
               onSaved: (String? value) {
                 value ??= '';
@@ -132,7 +125,7 @@ class CalloutFormWidget extends ConsumerWidget {
               ),
             ),
             TextFormField(
-              initialValue: oneStepFormState[MartialArtsMove.kick] ?? '',
+              initialValue: oneStepFormState.moves[MartialArtsMove.kick] ?? '',
               validator: validateInputString,
               onSaved: (String? value) {
                 value ??= '';
@@ -148,7 +141,7 @@ class CalloutFormWidget extends ConsumerWidget {
               ),
             ),
             TextFormField(
-              initialValue: oneStepFormState[MartialArtsMove.grab] ?? '',
+              initialValue: oneStepFormState.moves[MartialArtsMove.grab] ?? '',
               validator: validateInputString,
               onSaved: (String? value) {
                 value ??= '';
@@ -167,7 +160,9 @@ class CalloutFormWidget extends ConsumerWidget {
               padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
               child: Text(
                   'You can set each field in the following way. For example setting Hands to 1,5,10-12 would result in a call out for Hands 1, Hands 5, Hands 10, Hands 11 and Hands 12. The maximum is 30 and leaving them blank will disable that section of call outs.',
-                  style: TextStyle(fontSize: 12)),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.secondary)),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),

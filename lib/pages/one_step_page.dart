@@ -1,7 +1,7 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../states/text_to_speach_state.dart';
+import '../states/one_steps_form_state.dart';
 import '../widgets/one_steps_form_widget.dart';
 import '../widgets/one_steps_text_to_speech_widget.dart';
 
@@ -9,6 +9,7 @@ class OneStepPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textToSpeechState = ref.watch(textToSpeechProvider);
+    final oneStepFormState = ref.watch(oneStepsFormProvider);
 
     return Scaffold(
         body: SafeArea(
@@ -52,7 +53,7 @@ class OneStepPage extends ConsumerWidget {
                   TextToSpeechStateEnum.stopped) {
                 ref
                     .read(textToSpeechProvider.notifier)
-                    .setCounter(5); // TODO: get from variable
+                    .setCounter(int.parse(oneStepFormState.delay));
               } else {
                 ref.read(textToSpeechProvider.notifier).setCounter(0);
               }

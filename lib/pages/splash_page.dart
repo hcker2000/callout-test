@@ -18,7 +18,7 @@ class _SplashPageState extends State<SplashPage>
     super.initState();
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 2), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => OneStepPage()));
     });

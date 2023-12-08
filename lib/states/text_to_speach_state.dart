@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:async';
 import 'one_steps_state.dart';
+import 'one_steps_form_state.dart';
 
 enum TextToSpeechStateEnum { running, stopped }
 
@@ -67,7 +68,7 @@ class TextToSpeechNotifier extends Notifier<TextToSpeechState> {
     var newValue = state.counter - 1;
     print('dec');
     if (newValue < 0) {
-      newValue = 5; // TODO: get from the state
+      newValue = int.parse(ref.read(oneStepsFormProvider.notifier).state.delay);
     }
 
     state = state.copyWith(counter: newValue);
